@@ -42,13 +42,13 @@ export class ChatComponent  {
                               .build();
 
     // On peut commencer à écouter pour les messages que l'on va recevoir du serveur
-    this.hubConnection.on('UsersList', (data) => {
+    this.hubConnection.on('ConnectedUsers', (data) => {
       this.usersList = data;
     });
 
     // TODO: Écouter le message pour mettre à jour la liste de channels
-    this.hubConnection.on("ConnectedUsers", (value) =>{
-      this.usersList = value;
+    this.hubConnection.on("Channels", (value) =>{
+      this.channelsList = value;
     });
 
     this.hubConnection.on('NewMessage', (message) => {
@@ -85,6 +85,7 @@ export class ChatComponent  {
 
   createChannel(){
     // TODO: Ajouter un invoke
+    this.hubConnection?.invoke('CreateChannel', this.newChannelName);
   }
 
   deleteChannel(channel: Channel){
