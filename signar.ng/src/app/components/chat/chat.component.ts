@@ -47,6 +47,9 @@ export class ChatComponent  {
     });
 
     // TODO: Écouter le message pour mettre à jour la liste de channels
+    this.hubConnection.on("ConnectedUsers", (value) =>{
+      this.usersList = value;
+    });
 
     this.hubConnection.on('NewMessage', (message) => {
       this.messages.push(message);
