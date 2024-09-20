@@ -83,8 +83,19 @@ namespace signalr.backend.Hubs
             string userTag = "[" + CurentUser.Email! + "]";
 
             // TODO: Faire quitter le vieux canal à l'utilisateur
+            var oldChannel = _context.Channel.Find(oldChannelId);
+            if (oldChannel != null)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, oldChannel.Title);
+            }
 
             // TODO: Faire joindre le nouveau canal à l'utilisateur
+            var newChannel = _context.Channel.Find(newChannelId);
+            if (newChannel != null)
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, newChannel.Title);
+            }
+
         }
 
         public async Task SendMessage(string message, int channelId, string userId)
@@ -92,10 +103,13 @@ namespace signalr.backend.Hubs
             if (userId != null)
             {
                 // TODO: Envoyer le message à cet utilisateur
+                
             }
             else if (channelId != 0)
             {
                 // TODO: Envoyer le message aux utilisateurs connectés à ce canal
+                var newChannel = _context.Channel.Find(channelId);
+                await Clients.Group(newChannel!.Title).SendAsync("NewMessage", "[Tous] " + message);
             }
             else
             {

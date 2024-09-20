@@ -62,7 +62,7 @@ export class ChatComponent  {
     });
     
     this.hubConnection.on('DlChannel', (value) => {
-      this.messages.push("Le channel " + value + " vous avez été exclu du groupe.");
+      this.messages.push("Le channel " + value + " à été supprimé.");
     });
 
     // On se connecte au Hub
