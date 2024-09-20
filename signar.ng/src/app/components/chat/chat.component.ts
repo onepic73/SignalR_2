@@ -56,6 +56,14 @@ export class ChatComponent  {
     });
 
     // TODO: Écouter le message pour quitter un channel (lorsque le channel est effacé)
+    this.hubConnection.on('Channels', (value) => {
+      this.channelsList = value;
+
+    });
+    
+    this.hubConnection.on('DlChannel', (value) => {
+      this.messages.push("Le channel " + value + " vous avez été exclu du groupe.");
+    });
 
     // On se connecte au Hub
     this.hubConnection
@@ -90,6 +98,7 @@ export class ChatComponent  {
 
   deleteChannel(channel: Channel){
     // TODO: Ajouter un invoke
+    this.hubConnection?.invoke('DeleteChannel', channel.id);
   }
 
   leaveChannel(){

@@ -67,14 +67,15 @@ namespace signalr.backend.Hubs
         public async Task DeleteChannel(int channelId)
         {
             Channel channel = _context.Channel.Find(channelId);
-
-            if(channel != null)
+            if (channel != null)
             {
+                await Clients.All.SendAsync("DlChannel", channel.Title);
                 _context.Channel.Remove(channel);
                 await _context.SaveChangesAsync();
             }
             string groupName = CreateChannelGroupName(channelId);
             // Envoyer les messages nécessaires aux clients
+            await Clients.All.SendAsync("Channels", _context.Channel.ToList());
         }
 
         public async Task JoinChannel(int oldChannelId, int newChannelId)
